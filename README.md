@@ -11,11 +11,11 @@ If you want to just send values, then all you need is:
     </div>
 
 If you want to use handlebars template then add an template and it will expect JSON:
-
+```bash
    <script id="jsonChannel" type="text/x-handlebars-template">
         Cool {{ok}}
     </script>
-    
+```
     <div socket='http://localhost:3000'>
         <div subscribe='jsonChannel'></div>
     </div>

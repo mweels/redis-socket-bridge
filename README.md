@@ -1,4 +1,4 @@
-# redis-socket-bridge
+# redis-node-socket-bridge
 - Creates a bridge from redis subscriptions to socket.io subscriptions.
 
 Include the script in your client project in test.html

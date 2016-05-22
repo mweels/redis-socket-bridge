@@ -27,7 +27,7 @@ start app.js
 redis-cli publish test  "Hello Html Page"
 ```
 ```bash
-redis-cli publish test  "{ \"ok\" : \"Hello Template\" }"
+redis-cli publish jsonChannel  "{ \"ok\" : \"Hello Template\" }"
 ```
 start publishing jsonData to jsonChannel, publish a value to test. 
 

@@ -23,6 +23,12 @@ If you want to use handlebars template then add an template and it will expect J
 Set your connection strings in Start app.js in node
 start app.js
 
+```bash
+redis-cli publish test  "Hello Html Page"
+```
+```bash
+redis-cli publish test  "{ \"ok\" : \"Hello Template\" }"
+```
 start publishing jsonData to jsonChannel, publish a value to test. 
 
 Your HTML page should automatically update your redis publishing.

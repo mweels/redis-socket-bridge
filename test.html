@@ -1,0 +1,129 @@
+<html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+
+<body>
+
+    <script id="test" type="text/x-handlebars-template">
+        Cool {{ok}}
+    </script>
+
+    <div socket='http://localhost:3000'>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test2'></div>
+        
+        
+            <div socket='http://localhost:2999'>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test'></div>
+        <div subscribe='test2'></div>
+    </div>
+    
+    
+    </div>
+
+</body>
+
+<script>
+
+    var _sockets = {};
+
+    var divs = document.getElementsByTagName('div');
+    for (var i = 0; i < divs.length; i++) {
+        var subscribe = divs[i].getAttribute('subscribe');
+
+        if (subscribe) {
+            setSocket(divs[i])
+        }
+
+    };
+
+    function setSocket(div) {
+
+        var node = div.parentNode;
+        while (!node.getAttribute("socket")) {
+            if (!node.parentNode())
+                throw "found a subscription without a socket @ " + JSON.stringify(node);
+
+            node = node.parentNode;
+        }
+
+        var socketEndPoint = node.getAttribute('socket');
+
+        if (!_sockets[socketEndPoint]) {
+            _sockets[socketEndPoint] = {
+                socket: io.connect(socketEndPoint, {
+                    resource: socketEndPoint,
+                    'force new connection': true
+                }),
+                nodes: [],
+                subs: []
+            };
+        }
+        _sockets[socketEndPoint].nodes.push(div);
+
+        var s = addSubscriber(_sockets[socketEndPoint], div.getAttribute("subscribe"));
+
+    }
+
+    function addSubscriber(socket, channel) {
+        debugger
+        
+        var hasSub = false;
+        for (var i=0; i < socket.subs.length;i++) {
+            if (socket.subs[i]===channel){
+                hasSub=true;
+               
+            }
+        }
+        
+        if (hasSub)
+            return false;
+
+        socket.subs.push(channel);
+        socket.socket.emit('subscribe', {
+            key: channel
+        });
+
+        socket.socket.on(channel, function(data) {
+            
+            
+            for (i = 0; i < socket.nodes.length; i++) {
+                if (socket.nodes[i].getAttribute("subscribe") === channel) {
+                    
+                    var html = data;
+                    
+                    var dest = document.getElementById(channel);
+                    if (dest) {
+                        
+                        try {
+                            
+                            var o  = JSON.parse(data);
+                            var source   = document.getElementById(channel).innerHTML;
+                            var template = Handlebars.compile(source);
+                            html = template(o);
+                            
+                        }
+                        catch (ex) {
+                            html = "<div style='background-color:#FF5050'>Bad JSON  " + data + "</div>";
+                        }
+                     
+                        
+                    }
+                                        
+                    socket.nodes[i].innerHTML = html;
+                    
+                }
+            }
+        });
+
+    }
+</script>
+
+</html>

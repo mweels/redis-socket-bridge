@@ -5,27 +5,36 @@
 
 <body>
 
-    <script id="test" type="text/x-handlebars-template">
+    <script id="ntier11@hotmail.com_status" type="text/x-handlebars-template">
         Cool {{ok}}
     </script>
 
+
+    <script id="lasth" type="text/x-handlebars-template">
+        <table>
+            <tr>
+                <td>E-Mail Addrss</td>
+                <td>Action</td>
+                <td>Event</td>
+                <td>Workflow</td>
+                <td>App Id</td>
+            </tr>         
+        {{#each .}}
+                
+                <tr>
+                <td>{{email}}</td>
+                <td>{{event}}</td>
+                <td>{{date}}</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+        {{/each}}
+    </script>
+    
     <div socket='http://localhost:3000'>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test2'></div>
+        <div subscribe='ntier11@hotmail.com_status'></div>        
         
-        
-            <div socket='http://localhost:2999'>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test'></div>
-        <div subscribe='test2'></div>
-    </div>
-    
-    
+        <div subscribe='lasth'></div>   
     </div>
 
 </body>
@@ -111,7 +120,7 @@
                             
                         }
                         catch (ex) {
-                            html = "<div style='background-color:#FF5050'>Bad JSON  " + data + "</div>";
+                            html = "<div style='background-color:#FF5050'>Bad JSON  " + data + "_" + ex  + "</div>";
                         }
                      
                         

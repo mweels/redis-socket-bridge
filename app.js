@@ -4,11 +4,12 @@ var subscriber = redis.createClient({host: 'server1'})
 var _clients =  [];
 var _socket;
 
-subscriber.on("message", function(channel, message) {    
+subscriber.on("message", function(channel, message) {  
+    console.log("Received Message " + channel + " " + message);  
     _clients.forEach(function(client) {
        client.subs.forEach(function(sub){
           if (sub == channel) {
-                client.socket.emit(channel,message + "::" + _clients.length);   
+                client.socket.emit(channel,message);   
           }         
        });
     });
